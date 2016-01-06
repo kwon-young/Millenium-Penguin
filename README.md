@@ -2,9 +2,9 @@
 
 ## PRE-RECQUIS
 
-python 2.7
-pyglet (www.pyglet.org)
-pillow
+* python 2.7
+* pyglet (www.pyglet.org)
+* pillow
 
 ## LANCEMENT DU PROGRAMME
 
@@ -14,10 +14,15 @@ exécuter la commande :
 ```
 sh Start.sh
 ```
-
-arrêt du programme                          : ESC
-orientation de la caméra virtuelle          : déplacement de la souris en enfonçant le bouton gauche
-déplacements avant, arrière, gauche, droite : flêches
++------------------------------------+---------------------------------------+
+| arrêt du programme                 | ESC                                   |
++====================================+=======================================+
+| orientation de la caméra virtuelle | déplacement de la souris en enfonçant |
+|                                    | le bouton gauche                      |
++------------------------------------+---------------------------------------+
+| déplacements avant, arrière,       | flêches                               |
+| gauche, droite                     |                                       |
++------------------------------------+---------------------------------------+
 
 ## PROGRAMMATION
 
