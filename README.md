@@ -16,7 +16,6 @@ sh Start.sh
 ```
 
 | arrêt du programme                 | ESC                                   |
-| ---------------------------------- | ------------------------------------- |
 | orientation de la caméra virtuelle | déplacement de la souris en enfonçant le bouton gauche |
 | déplacements avant, arrière,  gauche, droite | flêches |
 
