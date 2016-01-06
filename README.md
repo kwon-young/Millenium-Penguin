@@ -14,7 +14,7 @@ exécuter la commande :
 ```
 sh Start.sh
 ```
-|------------------------------------|---------------------------------------|
+
 | arrêt du programme                 | ESC                                   |
 |------------------------------------|---------------------------------------|
 | orientation de la caméra virtuelle | déplacement de la souris en enfonçant |
@@ -22,7 +22,6 @@ sh Start.sh
 |------------------------------------|---------------------------------------|
 | déplacements avant, arrière,       | flêches                               |
 | gauche, droite                     |                                       |
-|------------------------------------|---------------------------------------|
 
 ## PROGRAMMATION
 
