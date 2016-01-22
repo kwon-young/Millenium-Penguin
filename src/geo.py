@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import math
 import random
-import pickle
+import copy
 
 
 class Vec3:
@@ -111,20 +111,26 @@ class Repere:
         self.u.setCoordonnees(x=math.cos(angle), y=math.sin(angle))
         self.v.produitVectoriel(self.w, self.u)
 
-    def avancer(self, l):
-        self.o.accumuler(l, self.u)
+    def store(self, vec1, vec2):
         self.memory.pop()
-        self.memory.insert(0, self.o)
+        vecmoins = Vec3([0, 0, 0])
+        vecmoins.moins(vec1, vec2)
+        self.memory.insert(0, vecmoins)
+
+    def avancer(self, l):
+        vec1 = copy.deepcopy(self.o)
+        self.o.accumuler(l, self.u)
+        self.store(vec1, self.o)
 
     def gauche(self, l):
+        vec1 = copy.deepcopy(self.o)
         self.o.accumuler(l, self.v)
-        self.memory.pop()
-        self.memory.insert(0, self.o)
+        self.store(vec1, self.o)
 
     def monter(self, l):
+        vec1 = self.copy.deepcopy(o)
         self.o.accumuler(l, self.w)
-        self.memory.pop()
-        self.memory.insert(0, self.o)
+        self.store(vec1, self.o)
 
     def tourner(self, a):
         self.angle += a
@@ -135,13 +141,14 @@ class Repere:
     def getDistance(self, repere):
         return self.o.distance(repere.o)
 
-    def getVitesse(self, repere):
+    def getVitesse(self):
+        for myvec in self.memory:
+            print myvec
         memcopy = copy.deepcopy(self.memory)
-        somme = memcopy[len(memcopy)-1]
-        memcopy.pop()
-        for vec in memcopy:
-            somme.plus(memcopy.pop())
-        somme.scale(1.0/len(self.memory))
-        return somme.distance()
+        distance = memcopy.pop()
+        for i in range(len(memcopy)-1):
+            distance.plus(distance, self.memory.pop())
+        distance.scale(1.0/(len(self.memory)-1.0))
+        return distance.norme()
         
 

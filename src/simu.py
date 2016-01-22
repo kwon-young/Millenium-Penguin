@@ -22,6 +22,10 @@ class Monde:
             x.dessiner()
 
     def actualiser(self, dt):
+        camera_vitesse = self.camera.repere.getVitesse()
+        #distance_pinguin_camera = self.camera.repere.getDistance(self.decor[len(self.decor)-1].repere)
+        print "vitesse de la camera : ", camera_vitesse
+        #print "distance pinguin camera : ", distance_pinguin_camera
         self.horloge += dt
         for x in self.activites:
             x.actualiser(self.horloge, dt)
