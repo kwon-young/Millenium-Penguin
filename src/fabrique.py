@@ -33,6 +33,7 @@ class Fabrique:
         le_pingouin.placer(geo.Vec3((-2.0, 3.0, 0.0)))
         le_pingouin.orienter(45.0 * math.pi / 180.0)
         self.monde.ajouter(decor=le_pingouin)
+        self.monde.pinguin = le_pingouin
 
         une_activite = simu.Activite(id="act-01")
         # une_activite.start()

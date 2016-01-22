@@ -12,6 +12,7 @@ class Monde:
     def __init__(self):
         self.horloge = 0.0
         self.camera = visu.Camera()
+        self.pinguin = visu.Objet()
         self.decor = []
         self.activites = []
         self.annuaire = {}
@@ -22,19 +23,43 @@ class Monde:
             x.dessiner()
 
     def actualiser(self, dt):
-        camera_vitesse = self.camera.repere.getVitesse()
-        #distance_pinguin_camera = self.camera.repere.getDistance(self.decor[len(self.decor)-1].repere)
-        print "vitesse de la camera : ", camera_vitesse
-        #print "distance pinguin camera : ", distance_pinguin_camera
         self.horloge += dt
         for x in self.activites:
             x.actualiser(self.horloge, dt)
+
+    def getVitesseCamera(self, dt):
+        return self.camera.repere.getVitesse(dt)
+
+    def getAngleCamera(self, p):
+        #On récupere la position de p
+        pos = geo.Vec3((0.0, 0.0, 0.0))
+        pos.copier(p.repere.o)
+
+        #On récupere la position de la caméra
+        posCam = geo.Vec3((0.0, 0.0, 0.0))
+        posCam.copier(self.camera.repere.o)
+
+        #On calcule p si le repère a juste translater à la caméra
+        pos.moins(pos, posCam)
+        
+        #Soit alpha l'angle de la caméra
+        alpha = self.camera.repere.getAngle()
+
+        aPrim = pos.x * math.cos(alpha) - pos.y * math.sin(alpha)
+        bPrim = pos.x * math.sin(alpha) + pos.y * math.cos(alpha)
+        return math.degrees(math.atan(bPrim/aPrim))
+
+        
 
     def ajouter(self, decor=None, activite=None):
         if decor != None:
             self.decor.append(decor)
         if activite != None:
             self.activites.append(activite)
+
+    def ajouterObjet(self, objet=None):
+        if objet != None:
+            self.objet.append(objet)
 
     def enregistrer(self, nom, obj):
         self.annuaire[nom] = obj

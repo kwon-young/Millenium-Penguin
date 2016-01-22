@@ -31,6 +31,7 @@ lInteracteur = ihm.Wimp(leMonde)
 laFabrique.fabriquer()
 
 
+
 def setup():
     glEnable(GL_DEPTH_TEST)
     glEnable(GL_TEXTURE_2D)
@@ -83,8 +84,10 @@ def updateRapide(dt):
 
 
 def updateLent(dt):
-    pass
-
+	print "distance : ", leMonde.camera.repere.getDistance(laFabrique.monde.pinguin.repere)
+	print "vitesse  : ", leMonde.getVitesseCamera(dt)
+	print "angle    : ", leMonde.getAngleCamera(leMonde.pinguin)
+	print ""
 
 import sys
 
@@ -92,5 +95,5 @@ if __name__ == "__main__":
     print ">> ", sys.argv
     setup()
     pyglet.clock.schedule_interval(updateRapide, 1.0 / 30.0)
-    pyglet.clock.schedule_interval(updateLent, 1.0 / 10.0)
+    pyglet.clock.schedule_interval(updateLent, 1.0 / 2.0)
     pyglet.app.run()
