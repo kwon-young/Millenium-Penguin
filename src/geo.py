@@ -118,19 +118,13 @@ class Repere:
         self.memory.insert(0, vecmoins)
 
     def avancer(self, l):
-        vec1 = copy.deepcopy(self.o)
         self.o.accumuler(l, self.u)
-        self.store(vec1, self.o)
 
     def gauche(self, l):
-        vec1 = copy.deepcopy(self.o)
         self.o.accumuler(l, self.v)
-        self.store(vec1, self.o)
 
     def monter(self, l):
-        vec1 = self.copy.deepcopy(o)
         self.o.accumuler(l, self.w)
-        self.store(vec1, self.o)
 
     def tourner(self, a):
         self.angle += a
@@ -146,9 +140,8 @@ class Repere:
             print myvec
         memcopy = copy.deepcopy(self.memory)
         distance = memcopy.pop()
-        for i in range(len(memcopy)-1):
-            distance.plus(distance, self.memory.pop())
-        distance.scale(1.0/(len(self.memory)-1.0))
+        for i in range(len(memcopy)-2):
+            distance.plus(distance, memcopy.pop())
         return distance.norme()
         
 
