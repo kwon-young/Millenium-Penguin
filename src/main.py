@@ -84,9 +84,12 @@ def updateRapide(dt):
 
 
 def updateLent(dt):
-	print "distance : ", leMonde.camera.repere.getDistance(laFabrique.monde.pinguin.repere)
-	print "vitesse  : ", leMonde.getVitesseCamera(dt)
-	print "angle    : ", leMonde.getAngleCamera(leMonde.pinguin)
+	# print "distance 			: ", leMonde.camera.repere.getDistance(laFabrique.monde.pinguin.repere)
+	# print "vitesse  			: ", leMonde.getVitesseCamera(dt)
+	print "angleCamera			: ", leMonde.getAngleCamera()
+	print "angleCameraPinguin	: ", leMonde.getAngleCameraObject(leMonde.pinguin)
+	print "Position Camera  : ", leMonde.getPositionCamera()
+	print "Position pinguin : ", leMonde.getPositionObjet(leMonde.pinguin)
 	print ""
 
 import sys

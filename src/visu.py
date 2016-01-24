@@ -2,6 +2,9 @@
 import pyglet
 from pyglet.gl import *
 
+import math
+import random
+
 import wavefront
 
 import geo

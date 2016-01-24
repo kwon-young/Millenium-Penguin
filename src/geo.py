@@ -126,6 +126,7 @@ class Repere:
 
 	def tourner(self, a):
 		self.angle += a
+		self.angle = self.angle%(2*math.pi)
 		self.angleDegre = self.angle * 180.0 / math.pi
 		self.u.setCoordonnees(x=math.cos(self.angle), y=math.sin(self.angle))
 		self.v.produitVectoriel(self.w, self.u)
