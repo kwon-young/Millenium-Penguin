@@ -102,6 +102,7 @@ class Repere:
 		self.angleDegre = 0.0
 		self.memory = [self.o, self.o, self.o]
 		self.oPrec = Vec3((0.0, 0.0, 0.0))
+		self.vitesse = 0.0
 
 	def placer(self, p):
 		self.o.copier(p)
@@ -140,11 +141,12 @@ class Repere:
 	def getO(self):
 		return self.o
 
-	def getVitesse(self, dt):
+	def updateVitesse(self, dt):
 		tmp = Vec3((0.0, 0.0, 0.0))
 		tmp.moins(self.o, self.oPrec)
-		vitesse = tmp.norme() / dt
-		self.store();
-		return vitesse
+		self.vitesse = tmp.norme() / dt
+		self.store()
+		return self.vitesse
+
 		
 

@@ -12,7 +12,7 @@ class Monde:
 	def __init__(self):
 		self.horloge = 0.0
 		self.camera = visu.Camera()
-		self.pinguin = visu.Objet()
+		self.pinguin = visu.Pinguin()
 		self.decor = []
 		self.activites = []
 		self.annuaire = {}
@@ -24,22 +24,12 @@ class Monde:
 
 	def actualiser(self, dt):
 		self.horloge += dt
+		self.camera.updateVitesse(dt)
+		self.camera.updateAngle()
+		self.pinguin.updateAngle()
+		self.pinguin.activite.actualiser(self.horloge, dt)
 		for x in self.activites:
 			x.actualiser(self.horloge, dt)
-
-	def getVitesseCamera(self, dt):
-		return self.camera.repere.getVitesse(dt)
-
-	def getAngleCameraObject(self, p):
-		alpha = self.camera.repere.getAngle()
-		posCam = self.camera.repere.o
-		posObj = p.repere.o
-		omega = math.atan((posObj.x - posCam.x)/(posObj.y - posCam.y))
-		return (omega - alpha) * 180 / math.pi
-
-	def getAngleCamera(self):
-		angle = self.camera.repere.getAngle()
-		return angle * 180.0 / math.pi
 
 	def getPositionCamera(self):
 		return "x ", self.camera.repere.o.x, " y ", self.camera.repere.o.y
@@ -86,29 +76,46 @@ class Fou(Activite):
 
 	def __init__(self, id=None, objet=None):
 		Activite.__init__(self, id, objet)
-		self.etat = 0
+		self.state = 0
+		self.dt = 0.0
 
 	def actualiser(self, t, dt):
 		if self.objet != None:
-			#x = random.random()
-			x = 1
-			if x < 0.4:
-				self.objet.avancer(4.0 * dt)
-			elif x < 0.6:
-				self.objet.tourner(math.pi / 4.0)
-			elif x < 0.8:
-				self.objet.tourner(-math.pi / 3.0)
-			else:
-				pass
+			self.dt = dt
 
-	# def comportement(self, objet):
-	# 	comportement = random.randrange(0, 3, 1)
-	# 	if comportement == 0:
-	# 		return 0
+	def effraye(self, p):
+		if self.objet.maillage.url != "../data/avatars/bleu.obj":
+			self.objet.maillage.setUrl("../data/avatars/bleu.obj")
+		angle = math.pi - math.radians(self.objet.getAngleObject(p))
+		self.objet.tourner(angle)
+		self.objet.avancer(2.0 * self.dt)
 
-	# def effraye(self, p):
-	# 	xp = p.repere.o.x
-	# 	yp = p.repere.o.y
-	# 	x = self.objet.repere.o.x
-	# 	y = self.objet.repere.o.y
+	def curieux(self, p):
+		if self.objet.maillage.url != "../data/avatars/vert.obj":
+			self.objet.maillage.setUrl("../data/avatars/vert.obj")
+		angle = math.pi - math.radians(self.objet.getAngleObject(p) + 180)
+		self.objet.tourner(angle)
+		if self.objet.getDistance(p) > 4.0 :
+			self.objet.avancer(2.0 * self.dt)
 
+	def enerve(self, p):
+		if self.objet.maillage.url != "../data/avatars/rouge.obj":
+			self.objet.maillage.setUrl("../data/avatars/rouge.obj")
+		angle = math.pi - math.radians(self.objet.getAngleObject(p) + 180)
+		self.objet.tourner(angle)
+		if self.objet.getDistance(p) > 0.1 :
+			self.objet.avancer(5.0 * self.dt)
+
+	def neutre(self):
+		if self.objet.maillage.url != "../data/avatars/p.obj":
+			self.objet.maillage.setUrl("../data/avatars/p.obj")
+		x = random.random()
+		if x < 0.5:
+			self.objet.avancer(2.0 * self.dt)
+		elif x < 0.65:
+			self.objet.tourner(math.pi / 4.0)
+		elif x < 0.8:
+			self.objet.tourner(-math.pi / 3.0)
+		else:
+			pass
+		pass

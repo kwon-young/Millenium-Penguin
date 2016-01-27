@@ -6,7 +6,7 @@ import math
 import random
 
 import wavefront
-
+import simu
 import geo
 
 
@@ -58,6 +58,8 @@ class Camera:
 		self.repere = geo.Repere()
 		self.repere.placer(geo.Vec3((-5.0, 0.0, 1.6)))
 		self.repere.orienter(0.0)
+		self.vitesse = 0.0
+		self.angleDegre = 0.0
 
 	def lookAt(self):
 		tx, ty, tz = self.repere.o.getCoordonnees()
@@ -83,6 +85,37 @@ class Camera:
 	def tourner(self, dCap):
 		self.repere.tourner(dCap)
 
+	def updateVitesse(self, dt):
+		self.vitesse = self.repere.updateVitesse(dt)
+
+	def getVitesse(self):
+		return self.vitesse		
+		
+	def updateAngle(self):
+		self.angleDegre = self.repere.angleDegre
+
+	def getAngle(self):
+		if self.angleDegre >= 0.0 and self.angleDegre <=180.0:	#bidouille pour ajuster correctement l'angle
+			return self.angleDegre
+		else:
+			return self.angleDegre - 360.0
+
+	def getAngleObject(self, p):
+		alpha = self.angleDegre
+		posCam = self.repere.o
+		posObj = p.repere.o
+		omega = math.atan2((posObj.y - posCam.y), (posObj.x - posCam.x)) * 180 / math.pi
+		angle = ((alpha - omega)%360.0)
+		if angle <= 180.0:
+			return angle
+		else:
+			return angle - 360.0
+		
+
+	def getDistanceObjet(self, obj):
+		return self.repere.getDistance(obj.repere)
+
+
 # =====================================================================================
 
 
@@ -97,7 +130,7 @@ class Objet:
 		self.maillage = maillage
 
 	def getDistance(self, obj):
-		distance = geo.Vec3(0.0, 0.0, 0.0)
+		distance = geo.Vec3((0.0, 0.0, 0.0))
 		distance.moins(self.repere.getO() , obj.repere.getO())
 		return distance.norme()
 
@@ -129,14 +162,72 @@ class Objet:
 			self.maillage.draw()
 			glPopMatrix()
 
+	def getAngleObject(self, p):
+		alpha = self.angleDegre
+		posPin = self.repere.o
+		posObj = p.repere.o
+		omega = math.atan2((posObj.y - posPin.y), (posObj.x - posPin.x)) * 180 / math.pi
+		angle = ((alpha - omega)%360.0)
+		if angle <= 180.0:
+			return angle
+		else:
+			return angle - 360.0
+
+	def getAngle(self):
+		if self.angleDegre >= 0.0 and self.angleDegre <=180.0:	#bidouille pour ajuster correctement l'angle
+			return self.angleDegre
+		else:
+			return self.angleDegre - 360.0
+
 
 # =====================================================================================
+
+class Pinguin(Objet):
+	def __init__(self, repere=None, maillage=None):
+		Objet.__init__(self, repere, maillage)
+		self.vitesse = 0.0
+		self.angleDegre = 0.0
+		self.state = 0
+		self.activite = simu.Fou(id="act", objet=self)
+
+	def setVitesse(self, dt):
+		self.vitesse = self.repere.updateVitesse(dt)
+
+	def getVitesse(self):
+		return self.vitesse
+
+	def updateAngle(self):
+		self.angleDegre = self.repere.angleDegre
+
+	def getAngle(self):
+		angle = self.angleDegre%360.0
+		if angle <= 180.0:
+			return angle
+		else:
+			return angle - 360.0
+
+	def printAngle(self, obj, x):
+		if x < 1.0:
+			self.activite.effraye(obj)
+		elif x < 2.0:
+			self.activite.curieux(obj)
+		elif x < 3.0:
+			self.activite.enerve(obj)
+		else:
+			self.activite.neutre()
+
+
+# =====================================================================================
+
 class Maillage:
 
 	def __init__(self):
 		self.perceptible = True
 
 	def draw(self):
+		pass
+
+	def updateMaillage(self):
 		pass
 
 # =====================================================================================
@@ -342,6 +433,10 @@ class Obj(Maillage):
 	def draw(self):
 		if self.perceptible:
 			self.model.Draw()
+
+	def setUrl(self, url):
+		self.url = url
+		self.model.LoadFile(self.url)
 
 
 class ObjY(Maillage):
